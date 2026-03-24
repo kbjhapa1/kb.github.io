@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale:1.0">
+<title>NVDA Financial Analysis — March 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f4f4f0; color: #1a1a18; font-size: 13px; }
+
+  .page { max-width: 980px; margin: 0 auto; padding: 28px 24px; }
+
+  /* Header */
+  .report-header { background: #1a1a18; color: #fff; border-radius: 10px; padding: 24px 28px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .report-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .report-header .sub { font-size: 12px; color: #aaa; margin-top: 4px; }
+  .report-header .price-block { text-align: right; }
+  .report-header .price { font-size: 32px; font-weight: 700; color: #6FCF97; }
+  .report-header .price-sub { font-size: 11px; color: #aaa; }
+
+  /* Section */
+  .section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #888; margin: 20px 0 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+
+  /* KPI grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border-radius: 8px; padding: 12px 10px; text-align: center; border: 0.5px solid #e0dfd7; }
+  .kpi-label { font-size: 10px; color: #888; margin-bottom: 4px; line-height: 1.3; }
+  .kpi-val { font-size: 20px; font-weight: 700; }
+  .kpi-val.green { color: #27500a; }
+  .kpi-val.blue { color: #185FA5; }
+  .kpi-val.amber { color: #854F0B; }
+  .kpi-val.red { color: #A32D2D; }
+
+  /* 2-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+  /* Chart card */
+  .chart-card { background: #fff; border-radius: 10px; padding: 16px; border: 0.5px solid #e0dfd7; }
+  .chart-card h3 { font-size: 12px; font-weight: 700; color: #444; margin-bottom: 12px; }
+
+  /* Data table */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table th { background: #1a1a18; color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; }
+  .data-table td { padding: 7px 10px; border-bottom: 0.5px solid #ebebeb; }
+  .data-table tr:nth-child(even) td { background: #f9f9f7; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table .highlight td { background: #e6f1fb !important; font-weight: 600; }
+  .up { color: #27500a; font-weight: 600; }
+  .dn { color: #A32D2D; font-weight: 600; }
+  .neu { color: #185FA5; font-weight: 600; }
+
+  /* Scorecard */
+  .scorecard { background: #fff; border-radius: 10px; border: 0.5px solid #e0dfd7; overflow: hidden; }
+  .scorecard-row { display: flex; align-items: center; padding: 9px 14px; border-bottom: 0.5px solid #ebebeb; gap: 12px; }
+  .scorecard-row:last-child { border-bottom: none; }
+  .sc-label { flex: 1; font-size: 12px; color: #444; }
+  .sc-bar-wrap { width: 160px; background: #f1efe8; border-radius: 4px; height: 8px; overflow: hidden; }
+  .sc-bar { height: 100%; border-radius: 4px; }
+  .sc-val { width: 60px; text-align: right; font-weight: 700; font-size: 12px; }
+
+  /* Bull / bear */
+  .bb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .bull-item { background: #eaf3de; border-left: 3px solid #3B6D11; border-radius: 6px; padding: 10px 12px; }
+  .bear-item { background: #fcebeb; border-left: 3px solid #A32D2D; border-radius: 6px; padding: 10px 12px; }
+  .bb-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .bb-body { font-size: 11px; color: #555; line-height: 1.5; }
+
+  /* Verdict */
+  .verdict-box { background: #1a1a18; color: #fff; border-radius: 10px; padding: 20px 24px; margin-top: 14px; }
+  .verdict-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: #6FCF97; }
+  .verdict-box p { font-size: 13px; line-height: 1.7; color: #ccc; }
+
+  .caveat { font-size: 10px; color: #aaa; margin-top: 16px; line-height: 1.6; border-top: 0.5px solid #ddd; padding-top: 10px; }
+
+  .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+  .badge.green { background: #eaf3de; color: #3B6D11; }
+  .badge.red { background: #fcebeb; color: #A32D2D; }
+  .badge.blue { background: #e6f1fb; color: #185FA5; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="report-header">
+    <div>
+      <div class="sub">NVIDIA Corporation · NASDAQ: NVDA · Financial Analysis</div>
+      <h1>NVDA Deep Dive</h1>
+      <div class="sub">Fiscal Year 2026 · Data as of March 22, 2026 · For IRA Investment Decision</div>
+    </div>
+    <div class="price-block">
+      <div class="price">$172.70</div>
+      <div class="price-sub">Current price &nbsp;·&nbsp; Analyst avg target: $265.97 (+54%)</div>
+    </div>
+  </div>
+
+  <!-- KPI Row 1 -->
+  <div class="section-title">Key Financial Highlights — Fiscal Year 2026</div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">FY26 Revenue</div><div class="kpi-val green">$215.9B</div></div>
+    <div class="kpi"><div class="kpi-label">Revenue Growth YoY</div><div class="kpi-val green">+65%</div></div>
+    <div class="kpi"><div class="kpi-label">Net Income TTM</div><div class="kpi-val green">$120.1B</div></div>
+    <div class="kpi"><div class="kpi-label">Free Cash Flow</div><div class="kpi-val green">$96.7B</div></div>
+    <div class="kpi"><div class="kpi-label">Gross Margin</div><div class="kpi-val green">71.1%</div></div>
+    <div class="kpi"><div class="kpi-label">Net Margin</div><div class="kpi-val green">55.6%</div></div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Market Cap</div><div class="kpi-val blue">$4.20T</div></div>
+    <div class="kpi"><div class="kpi-label">Trailing P/E</div><div class="kpi-val blue">35.0x</div></div>
+    <div class="kpi"><div class="kpi-label">Forward P/E</div><div class="kpi-val green">20.8x</div></div>
+    <div class="kpi"><div class="kpi-label">PEG Ratio</div><div class="kpi-val green">0.55x</div></div>
+    <div class="kpi"><div class="kpi-label">Cash on Hand</div><div class="kpi-val green">$62.6B</div></div>
+    <div class="kpi"><div class="kpi-label">Debt/Equity</div><div class="kpi-val green">0.07x</div></div>
+  </div>
+
+  <!-- Revenue + Earnings Charts -->
+  <div class="section-title">Revenue & Earnings Trend — Quarterly (FY2025–FY2026)</div>
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>Quarterly Revenue ($B)</h3>
+      <div style="position:relative;height:220px"><canvas id="revChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>GAAP EPS (diluted) per quarter</h3>
+      <div style="position:relative;height:220px"><canvas id="epsChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Annual Revenue Chart -->
+  <div class="section-title">Annual Revenue Growth — Fiscal Years 2020–2026</div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <h3>Annual Revenue ($B) — the hockey stick</h3>
+    <div style="position:relative;height:200px"><canvas id="annualRevChart"></canvas></div>
+  </div>
+
+  <!-- Income Statement Table -->
+  <div class="section-title">Income Statement Snapshot — Quarterly Progression</div>
+  <div style="background:#fff;border-radius:10px;border:0.5px solid #e0dfd7;overflow:hidden;margin-bottom:14px;">
+    <table class="data-table">
+      <tr><th>Metric</th><th>Q4 FY26</th><th>Q3 FY26</th><th>Q2 FY26</th><th>Q1 FY26</th><th>Q4 FY25</th><th>YoY Growth</th></tr>
+      <tr class="highlight"><td>Revenue</td><td class="up">$68.1B</td><td>$57.0B</td><td>$46.7B</td><td>$44.1B</td><td>$39.3B</td><td class="up">+73%</td></tr>
+      <tr><td>Gross Profit</td><td class="up">$51.1B</td><td>$41.9B</td><td>$34.0B</td><td>$26.8B</td><td>$28.9B</td><td class="up">+77%</td></tr>
+      <tr><td>Gross Margin</td><td class="up">75.0%</td><td>73.4%</td><td>72.4%</td><td>61.0%</td><td>73.5%</td><td class="up">+1.5pts</td></tr>
+      <tr><td>Operating Income</td><td class="up">$41.0B</td><td>$36.0B</td><td>$28.4B</td><td>$19.3B</td><td>$23.3B</td><td class="up">+76%</td></tr>
+      <tr><td>Net Income</td><td class="up">$32.8B</td><td>$31.9B</td><td>$26.4B</td><td>$18.8B</td><td>$22.1B</td><td class="up">+80%</td></tr>
+      <tr><td>GAAP EPS (diluted)</td><td class="up">$1.76</td><td>$1.30</td><td>$1.08</td><td>$0.81</td><td>$0.89</td><td class="up">+98%</td></tr>
+      <tr><td>Op. Cash Flow</td><td class="up">~$33B</td><td>~$30B</td><td>~$25B</td><td>~$20B</td><td>$19.5B</td><td class="up">+69%</td></tr>
+    </table>
+  </div>
+
+  <!-- Segment breakdown + Margins -->
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>Revenue by Segment — Q4 FY26</h3>
+      <div style="position:relative;height:220px"><canvas id="segChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Profitability Margins — FY2026 Full Year</h3>
+      <div style="position:relative;height:220px"><canvas id="marginChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Balance Sheet -->
+  <div class="section-title">Balance Sheet — Financial Health (as of Jan 2026)</div>
+  <div class="three-col">
+    <div class="chart-card">
+      <h3>Assets vs Liabilities</h3>
+      <div style="position:relative;height:180px"><canvas id="balanceChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Capital Strength Metrics</h3>
+      <table class="data-table" style="margin-top:4px">
+        <tr><td>Cash & Equivalents</td><td class="up" style="text-align:right">$62.6B</td></tr>
+        <tr><td>Total Debt</td><td style="text-align:right;color:#A32D2D">$11.4B</td></tr>
+        <tr><td>Net Cash Position</td><td class="up" style="text-align:right">$51.1B</td></tr>
+        <tr><td>Current Ratio</td><td class="up" style="text-align:right">3.91x</td></tr>
+        <tr><td>Debt / Equity</td><td class="up" style="text-align:right">0.07x</td></tr>
+        <tr><td>Shares Outstanding</td><td style="text-align:right">24.3B</td></tr>
+      </table>
+    </div>
+    <div class="chart-card">
+      <h3>Shareholder Returns</h3>
+      <table class="data-table" style="margin-top:4px">
+        <tr><td>ROE</td><td class="up" style="text-align:right">101.5%</td></tr>
+        <tr><td>ROIC</td><td class="up" style="text-align:right">126.3%</td></tr>
+        <tr><td>FCF (TTM)</td><td class="up" style="text-align:right">$96.7B</td></tr>
+        <tr><td>Buyback Authorization</td><td style="text-align:right;color:#185FA5">$60.0B</td></tr>
+        <tr><td>Buyback H1 FY26</td><td style="text-align:right">$24.3B</td></tr>
+        <tr><td>Annual Dividend</td><td style="text-align:right">$0.04/sh</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Valuation -->
+  <div class="section-title">Valuation Analysis — Is NVDA Cheap or Expensive?</div>
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>P/E Ratio History — Current vs Historical Avg</h3>
+      <div style="position:relative;height:200px"><canvas id="peChart"></canvas></div>
+    </div>
+    <div>
+      <div class="scorecard">
+        <div class="scorecard-row">
+          <div class="sc-label">Trailing P/E (35.0x) vs 5-yr avg (63.8x)</div>
+          <div class="sc-bar-wrap"><div class="sc-bar" style="width:55%;background:#3B6D11"></div></div>
+          <div class="sc-val up">Cheap</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="sc-label">Forward P/E (20.8x) vs S&P 500 (22x)</div>
+          <div class="sc-bar-wrap"><div class="sc-bar" style="width:95%;background:#3B6D11"></div></div>
+          <div class="sc-val up">Very Cheap</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="sc-label">PEG Ratio (0.55x) vs fair value (1.0x)</div>
+          <div class="sc-bar-wrap"><div class="sc-bar" style="width:100%;background:#3B6D11"></div></div>
+          <div class="sc-val up">Deeply Cheap</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="sc-label">EV/EBITDA (31.1x) vs peers (~40x)</div>
+          <div class="sc-bar-wrap"><div class="sc-bar" style="width:78%;background:#185FA5"></div></div>
+          <div class="sc-val neu">Fair</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="sc-label">Revenue Growth (65% YoY) vs sector (~15%)</div>
+          <div class="sc-bar-wrap"><div class="sc-bar" style="width:100%;background:#3B6D11"></div></div>
+          <div class="sc-val up">Exceptional</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="sc-label">Net Margin (55.6%) vs sector avg (~25%)</div>
+          <div class="sc-bar-wrap"><div class="sc-bar" style="width:100%;background:#3B6D11"></div></div>
+          <div class="sc-val up">Best-in-class</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="sc-label">Beta (2.37x) — market volatility</div>
+          <div class="sc-bar-wrap"><div class="sc-bar" style="width:80%;background:#A32D2D"></div></div>
+          <div class="sc-val dn">High Risk</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bull vs Bear -->
+  <div class="section-title">Investment Case — Bull vs Bear Arguments</div>
+  <div class="bb-grid" style="margin-bottom:14px">
+    <div class="bull-item"><div class="bb-title" style="color:#3B6D11">GPU monopoly — 92% AI market share</div><div class="bb-body">At $30K/GPU, no competitor has matched H100/H200/Blackwell performance. AMD is 2+ generations behind. CUDA ecosystem lock-in with 10M+ developers makes switching costs prohibitive.</div></div>
+    <div class="bear-item"><div class="bb-title" style="color:#A32D2D">Cisco 2000 risk — growth deceleration</div><div class="bb-body">Revenue grew 581% in FY24. That rate is mathematically impossible to sustain. If growth decelerates from 65% to 20%, the market multiple could re-rate violently — regardless of profits.</div></div>
+    <div class="bull-item"><div class="bb-title" style="color:#3B6D11">$500B AI capex 2026 — Goldman Sachs estimate</div><div class="bb-body">Global AI infrastructure spend keeps being underestimated. Every hyperscaler (Microsoft, Google, Meta, Amazon) is racing to deploy Blackwell clusters. Demand consistently exceeds supply.</div></div>
+    <div class="bear-item"><div class="bb-title" style="color:#A32D2D">China export restrictions — $15B+ revenue risk</div><div class="bb-body">H20 chip ban already cost $15B+ in potential revenue. Escalation or broader export controls could block NVDA from China entirely — historically 20%+ of total revenue.</div></div>
+    <div class="bull-item"><div class="bb-title" style="color:#3B6D11">Blackwell Ultra + Rubin — multi-year runway</div><div class="bb-body">Q4 FY26 Blackwell revenue was record-breaking. Rubin architecture is in pipeline. Each new chip generation buys 2–3 more years of hyper-growth before competition can respond.</div></div>
+    <div class="bear-item"><div class="bb-title" style="color:#A32D2D">Custom ASICs threat from hyperscalers</div><div class="bb-body">Google TPUs, Amazon Trainium, Microsoft Maia, and Meta MTIA are all custom silicon projects reducing dependence on Nvidia GPUs. If ASICs take 30%+ of workloads, the TAM shrinks.</div></div>
+    <div class="bull-item"><div class="bb-title" style="color:#3B6D11">$51B net cash — fortress balance sheet</div><div class="bb-body">More cash than debt, $96.7B FCF, 0.07x D/E ratio. Nvidia can fund R&D, acquisitions, and $60B in buybacks without touching external capital. Cash is also the ultimate competitive weapon.</div></div>
+    <div class="bear-item"><div class="bb-title" style="color:#A32D2D">70%+ drawdowns are historically normal for NVDA</div><div class="bb-body">NVDA fell 82% in 2018-19, 68% in 2021-22, 43% in 2025. In your IRA, a 70% crash turns $200K into $60K. Will you hold, or will you panic-sell at the bottom?</div></div>
+  </div>
+
+  <!-- Analyst consensus -->
+  <div class="section-title">Analyst Consensus — 70 Analysts Covering NVDA</div>
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>Rating distribution (70 analysts)</h3>
+      <div style="position:relative;height:200px"><canvas id="analystChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>12-month price target scenarios</h3>
+      <table class="data-table" style="margin-top:4px">
+        <tr><th>Scenario</th><th>Price Target</th><th>Upside</th><th>Analyst</th></tr>
+        <tr style="background:#fcebeb"><td>Street Low</td><td class="dn">$140</td><td class="dn">−19%</td><td>Bear case</td></tr>
+        <tr style="background:#e6f1fb"><td>Consensus Avg</td><td class="neu">$265.97</td><td class="neu">+54%</td><td>70 analysts</td></tr>
+        <tr style="background:#eaf3de"><td>Street High</td><td class="up">$380</td><td class="up">+120%</td><td>Evercore ISI</td></tr>
+        <tr style="background:#eaf3de"><td>Bull case 2030</td><td class="up">$491</td><td class="up">+184%</td><td>5-yr model</td></tr>
+      </table>
+      <div style="margin-top:12px;font-size:11px;color:#555;line-height:1.6;">
+        <strong>Rating breakdown:</strong> 64 Strong Buy · 5 Hold · 1 Sell<br>
+        <strong>Consensus:</strong> Strong Buy<br>
+        <strong>% analysts bullish:</strong> 91%
+      </div>
+    </div>
+  </div>
+
+  <!-- Millionaire Path -->
+  <div class="section-title">Millionaire Path — Your IRA Projection (Illustrative Only)</div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <h3>$200,000 IRA invested in NVDA — projected value at various CAGR scenarios × 18 years</h3>
+    <div style="position:relative;height:200px"><canvas id="projChart"></canvas></div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="verdict-box">
+    <h2>Investment Verdict — MBA Banker's Assessment</h2>
+    <p>
+      Nvidia is the most financially exceptional company in the history of public markets by several metrics — 55.6% net margin, 101.5% ROE, 126% ROIC, 65% revenue growth, and $96.7B in free cash flow in a single year. Its PEG ratio of 0.55x makes it cheaper on a growth-adjusted basis than most S&P 500 stocks growing at 8%. The forward P/E of 20.8x for a company compounding earnings at 60%+ annually is the definition of undervalued.
+      <br><br>
+      The single honest risk: concentration. Your IRA would own one company in one sector. NVDA has crashed 82%, 68%, and 43% in the last 8 years — and recovered every time. If you can hold through the next inevitable 50–70% drawdown without selling, the 18-year math overwhelmingly favors multi-millionaire outcomes. If you cannot, pick VGT and sleep well. The stock is not the risk. Your own behavior during a crash is the risk.
+      <br><br>
+      <span style="color:#6FCF97;font-weight:700;">Recommendation: Strong Buy for a high-risk, long-horizon IRA investor. Conviction level: 9/10.</span>
+    </p>
+  </div>
+
+  <div class="caveat">
+    Data sources: Nvidia SEC filings (Q1–Q4 FY2026), NVIDIA Newsroom press releases, StockAnalysis.com, FullRatio.com, CompaniesMarketCap.com. All financial data as of most recently reported quarter (Q4 FY26 ending Jan 25, 2026). Stock price as of March 20, 2026. Past performance does not guarantee future results. Projections are illustrative only using historical average returns. This report is for informational purposes only and does not constitute personalized investment advice. Consult a licensed financial advisor and tax professional before making IRA investment decisions.
+  </div>
+
+</div>
+
+<script>
+// Revenue quarterly chart
+new Chart(document.getElementById('revChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26'],
+    datasets: [{
+      label: 'Revenue ($B)',
+      data: [39.3, 44.1, 46.7, 57.0, 68.1],
+      backgroundColor: ['#888','#185FA5','#185FA5','#185FA5','#27500a'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { callback: v => '$'+v+'B', font: { size: 10 } }, grid: { color: '#f0efe7' } },
+      x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// EPS quarterly
+new Chart(document.getElementById('epsChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26'],
+    datasets: [{
+      label: 'GAAP EPS',
+      data: [0.89, 0.81, 1.08, 1.30, 1.76],
+      borderColor: '#185FA5',
+      backgroundColor: 'rgba(24,95,165,0.08)',
+      pointBackgroundColor: '#185FA5',
+      tension: 0.3, fill: true, pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: false, ticks: { callback: v => '$'+v, font: { size: 10 } }, grid: { color: '#f0efe7' } },
+      x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Annual revenue
+new Chart(document.getElementById('annualRevChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FY20','FY21','FY22','FY23','FY24','FY25','FY26'],
+    datasets: [{
+      label: 'Annual Revenue ($B)',
+      data: [10.9, 16.7, 26.9, 26.9, 60.9, 130.5, 215.9],
+      backgroundColor: ['#d3d1c7','#b4b2a9','#888780','#5F5E5A','#185FA5','#0C447C','#27500a'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { callback: v => '$'+v+'B', font: { size: 10 } }, grid: { color: '#f0efe7' } },
+      x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Segment donut — Q4 FY26
+new Chart(document.getElementById('segChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Data Center','Gaming','Professional Viz','Automotive','OEM & Other'],
+    datasets: [{
+      data: [58.9, 5.5, 0.9, 1.7, 1.1],
+      backgroundColor: ['#0C447C','#185FA5','#378ADD','#5DCAA5','#d3d1c7'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 10 }, boxWidth: 12, padding: 8 } }
+    }
+  }
+});
+
+// Margins bar
+new Chart(document.getElementById('marginChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Gross\nMargin','Operating\nMargin','Net\nMargin','FCF\nMargin'],
+    datasets: [{
+      label: 'FY2026 %',
+      data: [71.1, 60.4, 55.6, 44.8],
+      backgroundColor: ['#0F6E56','#185FA5','#3B6D11','#639922'],
+      borderRadius: 4
+    }, {
+      label: 'S&P 500 avg',
+      data: [45, 20, 14, 10],
+      backgroundColor: ['rgba(0,0,0,0.12)','rgba(0,0,0,0.12)','rgba(0,0,0,0.12)','rgba(0,0,0,0.12)'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { font: { size: 10 }, boxWidth: 10 } } },
+    scales: {
+      y: { beginAtZero: true, max: 100, ticks: { callback: v => v+'%', font: { size: 10 } }, grid: { color: '#f0efe7' } },
+      x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Balance sheet
+new Chart(document.getElementById('balanceChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Cash', 'Total Assets', 'Total Liabilities', 'Net Cash'],
+    datasets: [{
+      data: [62.6, 161.0, 30.6, 51.1],
+      backgroundColor: ['#27500a','#185FA5','#A32D2D','#3B6D11'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { callback: v => '$'+v+'B', font: { size: 10 } }, grid: { color: '#f0efe7' } },
+      x: { ticks: { font: { size: 9 } }, grid: { display: false } }
+    }
+  }
+});
+
+// PE history
+new Chart(document.getElementById('peChart'), {
+  type: 'line',
+  data: {
+    labels: ['FY22','FY23','FY24','FY25','FY26 (now)'],
+    datasets: [{
+      label: 'NVDA P/E',
+      data: [74.6, 80.7, 80.5, 46.6, 35.0],
+      borderColor: '#185FA5', backgroundColor: 'rgba(24,95,165,0.08)',
+      pointBackgroundColor: '#185FA5', tension: 0.3, fill: true, pointRadius: 5
+    }, {
+      label: '10-yr avg (53.7x)',
+      data: [53.7, 53.7, 53.7, 53.7, 53.7],
+      borderColor: '#A32D2D', borderDash: [5,5], pointRadius: 0, tension: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { font: { size: 10 }, boxWidth: 10 } } },
+    scales: {
+      y: { ticks: { callback: v => v+'x', font: { size: 10 } }, grid: { color: '#f0efe7' } },
+      x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Analyst ratings donut
+new Chart(document.getElementById('analystChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Strong Buy (64)','Hold (5)','Sell (1)'],
+    datasets: [{
+      data: [64, 5, 1],
+      backgroundColor: ['#27500a','#854F0B','#A32D2D'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } }
+    }
+  }
+});
+
+// Projection chart
+new Chart(document.getElementById('projChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Bear (5% CAGR)','Conservative (10%)','Moderate (15%)','Base Case (20%)','Bull Case (25%)','Super Bull (30%)'],
+    datasets: [{
+      label: '$200K invested × 18 years',
+      data: [0.48, 1.12, 2.54, 5.65, 12.3, 26.2],
+      backgroundColor: ['#A32D2D','#D85A30','#854F0B','#185FA5','#0F6E56','#27500a'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { callback: v => '$'+v+'M', font: { size: 10 } }, grid: { color: '#f0efe7' } },
+      x: { ticks: { font: { size: 9 }, maxRotation: 20 }, grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
