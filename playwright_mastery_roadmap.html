@@ -1,0 +1,1011 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);background:transparent}
+.app{max-width:900px;margin:0 auto;padding:1rem 0}
+.header{margin-bottom:1.5rem}
+.header h1{font-size:22px;font-weight:500;margin-bottom:4px}
+.header p{font-size:14px;color:var(--color-text-secondary)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:1rem}
+.nav-btn{font-size:12px;padding:5px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.nav-btn:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.nav-btn.active{background:#185FA5;color:#E6F1FB;border-color:#185FA5}
+.section{display:none}
+.section.active{display:block}
+.progress-bar-wrap{background:var(--color-background-secondary);border-radius:var(--border-radius-md);height:6px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:#1D9E75;border-radius:var(--border-radius-md);transition:width 0.4s}
+.progress-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.card h2{font-size:16px;font-weight:500;margin-bottom:.75rem}
+.card h3{font-size:14px;font-weight:500;margin-bottom:.5rem;color:var(--color-text-primary)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;margin-bottom:.5rem}
+.badge-blue{background:#E6F1FB;color:#0C447C}
+.badge-green{background:#EAF3DE;color:#3B6D11}
+.badge-amber{background:#FAEEDA;color:#854F0B}
+.badge-red{background:#FCEBEB;color:#A32D2D}
+.badge-purple{background:#EEEDFE;color:#3C3489}
+.topic-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.topic-row:last-child{border-bottom:none}
+.check-col{padding-top:2px;flex-shrink:0}
+.check-col input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#185FA5}
+.topic-label{font-size:13px;color:var(--color-text-primary);line-height:1.5}
+.topic-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.topic-meta{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+.tag{font-size:11px;padding:1px 6px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.project-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem}
+.project-card .level{font-size:11px;font-weight:500;padding:2px 8px;border-radius:var(--border-radius-md);display:inline-block;margin-bottom:.5rem}
+.project-card h3{font-size:15px;font-weight:500;margin-bottom:.5rem}
+.project-card p{font-size:13px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.5rem}
+.step-list{list-style:none;padding:0}
+.step-list li{font-size:12px;color:var(--color-text-secondary);padding:3px 0;padding-left:14px;position:relative;line-height:1.5}
+.step-list li::before{content:'→';position:absolute;left:0;color:#185FA5}
+.week-row{display:grid;grid-template-columns:80px 1fr 100px;gap:12px;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.week-row:last-child{border-bottom:none}
+.week-label{font-size:13px;font-weight:500;color:#185FA5}
+.week-focus{font-size:13px;color:var(--color-text-primary)}
+.week-hrs{font-size:12px;color:var(--color-text-secondary);text-align:right}
+.tip-row{padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;line-height:1.6}
+.tip-row:last-child{border-bottom:none}
+.tip-label{font-weight:500;color:var(--color-text-primary);margin-bottom:2px;font-size:13px}
+.tip-body{color:var(--color-text-secondary);font-size:12px;line-height:1.5}
+.mistake{background:#FCEBEB;border-left:3px solid #A32D2D;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:6px 10px;margin-top:6px;font-size:12px;color:#791F1F}
+.pro-tip{background:#EAF3DE;border-left:3px solid #3B6D11;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:6px 10px;margin-top:6px;font-size:12px;color:#27500A}
+.folder-tree{font-family:var(--font-mono);font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;line-height:1.8}
+.code-block{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;line-height:1.7;white-space:pre;overflow-x:auto}
+.stat-row{display:flex;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px;flex:1;min-width:80px}
+.stat-num{font-size:22px;font-weight:500;color:#185FA5}
+.stat-lbl{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.resource-row{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);align-items:flex-start}
+.resource-row:last-child{border-bottom:none}
+.resource-icon{width:28px;height:28px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.resource-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.resource-desc{font-size:12px;color:var(--color-text-secondary)}
+.avoid{background:#FAEEDA;border-left:3px solid #854F0B;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:6px 10px;font-size:12px;color:#633806;margin-top:8px}
+.overall-progress{display:flex;align-items:center;gap:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:1.5rem}
+.overall-ring{position:relative;width:48px;height:48px;flex-shrink:0}
+.overall-ring svg{transform:rotate(-90deg)}
+.overall-pct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;font-weight:500;color:#185FA5}
+.overall-text h3{font-size:15px;font-weight:500;margin-bottom:2px}
+.overall-text p{font-size:12px;color:var(--color-text-secondary)}
+</style>
+
+<div class="app">
+<div class="header">
+  <h1>Playwright Mastery Roadmap</h1>
+  <p>Senior QA Automation Architect track — TypeScript, Docker, CI/CD</p>
+</div>
+
+<div class="overall-progress" id="overallWrap">
+  <div class="overall-ring">
+    <svg width="48" height="48" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="20" fill="none" stroke="#D3D1C7" stroke-width="4"/>
+      <circle id="ring-circle" cx="24" cy="24" r="20" fill="none" stroke="#185FA5" stroke-width="4" stroke-dasharray="125.66" stroke-dashoffset="125.66" stroke-linecap="round"/>
+    </svg>
+    <span class="overall-pct" id="overallPct">0%</span>
+  </div>
+  <div class="overall-text">
+    <h3 id="overallTitle">Let's start your journey</h3>
+    <p id="overallSub">Check items as you complete them across all sections</p>
+  </div>
+</div>
+
+<div class="nav" id="mainNav">
+  <button class="nav-btn active" data-tab="structure">1. Learning Structure</button>
+  <button class="nav-btn" data-tab="handson">2. Hands-On</button>
+  <button class="nav-btn" data-tab="projects">3. Projects</button>
+  <button class="nav-btn" data-tab="framework">4. Framework Design</button>
+  <button class="nav-btn" data-tab="cicd">5. CI/CD + Docker</button>
+  <button class="nav-btn" data-tab="bestpractices">6. Best Practices</button>
+  <button class="nav-btn" data-tab="timeline">7. Study Plan</button>
+  <button class="nav-btn" data-tab="mindset">8. Engineer Mindset</button>
+  <button class="nav-btn" data-tab="resources">9. Resources</button>
+  <button class="nav-btn" data-tab="checklist">10. Master Checklist</button>
+</div>
+
+<!-- SECTION 1: LEARNING STRUCTURE -->
+<div class="section active" id="tab-structure">
+
+<div class="stat-row">
+  <div class="stat"><div class="stat-num">3</div><div class="stat-lbl">Skill Levels</div></div>
+  <div class="stat"><div class="stat-num">25+</div><div class="stat-lbl">Core Topics</div></div>
+  <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Weeks</div></div>
+  <div class="stat"><div class="stat-num">~75</div><div class="stat-lbl">Total Hours</div></div>
+</div>
+
+<div class="card">
+  <span class="badge badge-green">Beginner — Week 1–2</span>
+  <h2>Foundation Layer</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Installation & Project Setup</strong>
+      <div class="topic-sub">npm init playwright@latest, tsconfig.json, playwright.config.ts anatomy</div>
+      <div class="topic-meta"><span class="tag">Why: Every test run starts here</span></div>
+      <div class="mistake">Mistake: Skipping tsconfig strict mode — causes type errors later you can't explain</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Core Locator Strategies</strong>
+      <div class="topic-sub">getByRole, getByLabel, getByText, getByTestId, locator() — priority order matters</div>
+      <div class="topic-meta"><span class="tag">Why: 80% of flakiness comes from bad locators</span></div>
+      <div class="mistake">Mistake: Using CSS selectors or XPath as first choice — they break on redesigns</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Actions & Assertions</strong>
+      <div class="topic-sub">click, fill, check, selectOption, expect().toBeVisible(), toHaveText(), toHaveValue()</div>
+      <div class="topic-meta"><span class="tag">Why: Core building blocks of every test</span></div>
+      <div class="mistake">Mistake: Using expect(await page.textContent()...) instead of auto-retrying expect(locator)</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Auto-Waiting Internals</strong>
+      <div class="topic-sub">How Playwright waits for actionability — enabled, visible, stable, receives events</div>
+      <div class="topic-meta"><span class="tag">Why: Eliminates 90% of sleep() anti-patterns</span></div>
+      <div class="mistake">Mistake: Adding page.waitForTimeout() everywhere — this is a crutch that masks real issues</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Test Structure & Lifecycle</strong>
+      <div class="topic-sub">test(), test.describe(), beforeEach, afterAll, test.use(), test.step()</div>
+      <div class="topic-meta"><span class="tag">Why: Clean structure = readable, maintainable tests</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="badge badge-blue">Intermediate — Week 3–4</span>
+  <h2>Professional Layer</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Page Object Model (POM)</strong>
+      <div class="topic-sub">Encapsulate selectors and actions per page, typed interfaces, composition patterns</div>
+      <div class="topic-meta"><span class="tag">Why: Scale past 50 tests without chaos</span></div>
+      <div class="mistake">Mistake: Putting assertions inside page objects — keep them in tests only</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Fixtures (Playwright's superpower)</strong>
+      <div class="topic-sub">test.extend(), scoping (test/worker), fixture composition, authenticated states</div>
+      <div class="topic-meta"><span class="tag">Why: DRY setup/teardown, shareable across test files</span></div>
+      <div class="pro-tip">Pro tip: Replace beforeEach blocks with fixtures — they compose better and are typed</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>API Testing with Playwright</strong>
+      <div class="topic-sub">request context, apiRequestContext, seeding data via API before UI tests</div>
+      <div class="topic-meta"><span class="tag">Why: API setup is 10x faster than UI setup for test data</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Network Interception</strong>
+      <div class="topic-sub">page.route(), fulfill(), abort(), mock APIs, intercept and assert request payloads</div>
+      <div class="topic-meta"><span class="tag">Why: Test error states without breaking the backend</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Authentication Patterns</strong>
+      <div class="topic-sub">storageState, globalSetup login, per-role auth fixtures, avoiding re-login overhead</div>
+      <div class="topic-meta"><span class="tag">Why: Without this, your suite is 3x slower</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Parallel Execution</strong>
+      <div class="topic-sub">workers config, test.describe.parallel, sharding across machines, worker-level isolation</div>
+      <div class="topic-meta"><span class="tag">Why: 500 tests must run in under 5 minutes in CI</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="badge badge-red">Advanced — Week 5–6</span>
+  <h2>Expert Layer</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Visual Regression Testing</strong>
+      <div class="topic-sub">toMatchSnapshot(), pixel comparison config, update strategies, threshold tuning</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Component Testing</strong>
+      <div class="topic-sub">playwright/experimental-ct-react, mounting components in isolation</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Trace Viewer & Debugging</strong>
+      <div class="topic-sub">trace: 'on-first-retry', playwright show-trace, codegen, inspector, PWDEBUG</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Custom Reporter</strong>
+      <div class="topic-sub">Reporter interface, Allure integration, Slack notification on failure, JSON output parsing</div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="structure"></div>
+    <div class="topic-label">
+      <strong>Test Tagging & Filtering</strong>
+      <div class="topic-sub">@smoke @regression tags, grep, projects config, skip/only annotations</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 2: HANDS-ON -->
+<div class="section" id="tab-handson">
+<div class="card">
+  <h2>Learning Philosophy</h2>
+  <div class="pro-tip" style="margin:0 0 12px;">Rule #1: Write code within 30 minutes of reading any concept. No code = no retention.</div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: Locator Dojo</strong>
+      <div class="topic-sub">Go to playwright.dev itself and write 10 tests using ONLY getByRole/getByLabel. No CSS allowed.</div>
+      <div class="topic-meta"><span class="tag">Readiness: 0 CSS selectors in your tests</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: Auto-wait Proof</strong>
+      <div class="topic-sub">Build a test with a 2s delayed element. Prove auto-wait works. Then break it with a bad locator to see the error.</div>
+      <div class="topic-meta"><span class="tag">Readiness: You can explain actionability without notes</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: POM Build</strong>
+      <div class="topic-sub">Pick any free site (SauceDemo, OrangeHRM). Build 3 page objects. Write 5 tests using them. Refactor until tests have ZERO raw locators.</div>
+      <div class="topic-meta"><span class="tag">Readiness: Test file imports POM only — no page.locator() in tests</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: Fixture Ladder</strong>
+      <div class="topic-sub">Convert 3 beforeEach blocks to fixtures. Add a worker-scoped DB seed fixture. Measure time saved.</div>
+      <div class="topic-meta"><span class="tag">Readiness: You can explain scope difference (test vs worker) verbally</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: API + UI Chain</strong>
+      <div class="topic-sub">Create a user via API → log in via UI → assert profile data. No UI form filling for setup.</div>
+      <div class="topic-meta"><span class="tag">Readiness: Setup is 100% via API, only assertions are UI</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: Network Mock Lab</strong>
+      <div class="topic-sub">Mock a failed API call (500 error). Assert UI shows the correct error state. Never touch the backend.</div>
+      <div class="topic-meta"><span class="tag">Readiness: You can test any error state without backend cooperation</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: Parallel Speed Test</strong>
+      <div class="topic-sub">Run 20 tests with workers:1 then workers:4. Record times. Tune for your machine. Add sharding config.</div>
+      <div class="topic-meta"><span class="tag">Readiness: Suite runs 3x faster with parallel config</span></div>
+    </div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="handson"></div>
+    <div class="topic-label">
+      <strong>Mini-Task: Trace Archaeology</strong>
+      <div class="topic-sub">Deliberately fail a test. Open trace. Navigate action-by-action. Find the exact failure point. Fix it using trace only (no console.log).</div>
+      <div class="topic-meta"><span class="tag">Readiness: You never use console.log to debug Playwright</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 3: PROJECTS -->
+<div class="section" id="tab-projects">
+<div class="card" style="border-left:3px solid #1D9E75">
+  <span class="level" style="background:#EAF3DE;color:#3B6D11">Beginner Project — Week 2</span>
+  <h3>SauceDemo E-Commerce Test Suite</h3>
+  <p>Full regression suite for saucedemo.com covering auth, product catalog, cart, and checkout. Resume value: shows basic POM, cross-browser, reporting.</p>
+  <div class="two-col" style="margin-top:10px">
+    <div>
+      <div class="tip-label" style="margin-bottom:6px;font-size:12px">Features to include</div>
+      <ul class="step-list">
+        <li>Login tests (valid/invalid/locked user)</li>
+        <li>Product sort & filter assertions</li>
+        <li>Add to cart / remove flow</li>
+        <li>Full checkout with data-driven inputs</li>
+        <li>Cross-browser: Chrome + Firefox + Safari</li>
+        <li>HTML report generation</li>
+        <li>Screenshot on failure</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tip-label" style="margin-bottom:6px;font-size:12px">Folder structure</div>
+      <div class="folder-tree">
+saucedemo-tests/
+├── pages/
+│   ├── LoginPage.ts
+│   ├── InventoryPage.ts
+│   └── CheckoutPage.ts
+├── tests/
+│   ├── auth.spec.ts
+│   ├── cart.spec.ts
+│   └── checkout.spec.ts
+├── fixtures/
+│   └── index.ts
+├── test-data/
+│   └── users.json
+├── playwright.config.ts
+└── package.json</div>
+    </div>
+  </div>
+  <div class="tip-label" style="margin:10px 0 6px;font-size:12px">Step-by-step implementation</div>
+  <ul class="step-list">
+    <li>Day 1: Setup + tsconfig + playwright.config (3 browsers) + base Page class</li>
+    <li>Day 2: LoginPage POM + auth tests with storageState</li>
+    <li>Day 3: InventoryPage + CartPage POMs + happy path tests</li>
+    <li>Day 4: CheckoutPage + data-driven test with JSON test data</li>
+    <li>Day 5: Add HTML reporter + screenshot-on-fail + run parallel</li>
+  </ul>
+</div>
+
+<div class="card" style="border-left:3px solid #185FA5;margin-top:1rem">
+  <span class="level" style="background:#E6F1FB;color:#0C447C">Intermediate Project — Week 4</span>
+  <h3>OrangeHRM HR System — API + UI Hybrid Framework</h3>
+  <p>Multi-role testing of OrangeHRM (free open source HR app). Covers admin vs employee roles, API seeding, fixtures architecture. Resume value: shows enterprise patterns.</p>
+  <div class="two-col" style="margin-top:10px">
+    <div>
+      <div class="tip-label" style="margin-bottom:6px;font-size:12px">Features to include</div>
+      <ul class="step-list">
+        <li>Multi-role fixtures (admin / employee)</li>
+        <li>API seeding — create users/leaves via REST</li>
+        <li>Network interception for error state tests</li>
+        <li>Allure reporter integration</li>
+        <li>Environment config (local/staging)</li>
+        <li>Test tags: @smoke @regression @api</li>
+        <li>GitHub Actions pipeline</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tip-label" style="margin-bottom:6px;font-size:12px">Folder structure</div>
+      <div class="folder-tree">
+orangehrm-framework/
+├── src/
+│   ├── pages/
+│   ├── api/
+│   │   └── UserApi.ts
+│   ├── fixtures/
+│   │   ├── auth.fixture.ts
+│   │   └── index.ts
+│   └── utils/
+│       ├── DataFactory.ts
+│       └── EnvConfig.ts
+├── tests/
+│   ├── smoke/
+│   └── regression/
+├── test-data/
+├── .env.staging
+├── .env.local
+└── playwright.config.ts</div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="border-left:3px solid #533AB7;margin-top:1rem">
+  <span class="level" style="background:#EEEDFE;color:#3C3489">Advanced Project — Week 6 (Resume-Ready)</span>
+  <h3>DRC INSIGHT Secure Browser Automation Framework</h3>
+  <p>Model it after real DRC INSIGHT testing: cross-platform secure browser behavior, kiosk mode flows, config validation, API + UI hybrid. This is your differentiator — it maps directly to your day job.</p>
+  <div class="two-col" style="margin-top:10px">
+    <div>
+      <div class="tip-label" style="margin-bottom:6px;font-size:12px">Features to include</div>
+      <ul class="step-list">
+        <li>Playwright projects per platform (Chrome/Firefox/webkit)</li>
+        <li>DRCConfiguration.json test data management</li>
+        <li>API fixture for OUID/COS SD seeding</li>
+        <li>Smoke + regression tag separation</li>
+        <li>Dockerized execution</li>
+        <li>GitHub Actions with sharding</li>
+        <li>Allure + Slack reporter</li>
+        <li>Retry logic + flaky test quarantine</li>
+        <li>Visual snapshot regression</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tip-label" style="margin-bottom:6px;font-size:12px">Scale like a company</div>
+      <ul class="step-list">
+        <li>Separate config per env (dev/stage/prod)</li>
+        <li>Central fixture library as shared module</li>
+        <li>Abstract API layer — swap mock vs real</li>
+        <li>Custom reporter posts to Jira/Slack</li>
+        <li>Docker image versioned and published</li>
+        <li>PR gates: smoke only, nightly: full regression</li>
+        <li>Flaky test auto-quarantine via tag</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 4: FRAMEWORK DESIGN -->
+<div class="section" id="tab-framework">
+<div class="card">
+  <h2>POM vs Fixtures vs Hybrid</h2>
+  <div class="three-col">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+      <div class="badge badge-blue">POM Only</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px;line-height:1.6">Good for: teams new to Playwright, simple apps<br><br>Drawback: setup/teardown still duplicated in beforeEach blocks</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+      <div class="badge badge-green">Fixtures Only</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px;line-height:1.6">Good for: API testing, auth state, DB seeding<br><br>Drawback: heavy UI interactions still need page abstractions</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+      <div class="badge badge-purple">Hybrid (Use This)</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px;line-height:1.6">POM for page abstractions + Fixtures for setup/teardown/auth.<br><br>Industry standard for production frameworks</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Test Data Management</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>Static data:</strong> JSON files in /test-data — users, products, configs. Versioned in git. Good for stable reference data.</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>Dynamic data:</strong> DataFactory.ts — generates unique test data per run (faker.js). Prevents test collision in parallel runs.</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>API seeding:</strong> Create data via API in fixture beforeAll. Tear down in afterAll. Zero UI dependency for setup.</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>Environment isolation:</strong> Each parallel worker gets its own test data namespace (WORKER_ID prefix on usernames).</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Environment Config Pattern</h2>
+  <div class="code-block">// EnvConfig.ts
+import { PlaywrightTestConfig } from '@playwright/test';
+
+const ENV = process.env.TEST_ENV || 'staging';
+
+const envConfig = {
+  local:   { baseURL: 'http://localhost:3000', apiURL: 'http://localhost:8080' },
+  staging: { baseURL: 'https://staging.drcinsight.com', apiURL: 'https://api-staging.drc.com' },
+  prod:    { baseURL: 'https://drcinsight.com', apiURL: 'https://api.drc.com' },
+};
+
+export const config = envConfig[ENV];
+
+// playwright.config.ts — use: npx playwright test --env=staging
+export default { use: { baseURL: config.baseURL } };</div>
+</div>
+
+<div class="card">
+  <h2>Reporting Stack</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>HTML Reporter:</strong> Built-in. Perfect for local dev. Add to .gitignore. Run: npx playwright show-report</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>Allure Reporter:</strong> allure-playwright npm package. Rich dashboards, trends, categories. Best for CI pipelines shared with team.</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>JSON Reporter:</strong> Use for custom downstream processing — post results to Jira, Slack, dashboards.</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="framework"></div>
+    <div class="topic-label"><strong>Custom Reporter:</strong> Implement the Reporter interface. onTestEnd() → post Slack webhook. onEnd() → generate Jira ticket for failures.</div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 5: CI/CD + DOCKER -->
+<div class="section" id="tab-cicd">
+<div class="card">
+  <h2>Dockerfile — Production-Grade</h2>
+  <div class="code-block">FROM mcr.microsoft.com/playwright:v1.44.0-jammy
+
+WORKDIR /app
+
+# Copy dependencies first (layer caching)
+COPY package*.json ./
+RUN npm ci
+
+# Copy source
+COPY . .
+
+# Run as non-root user (security)
+RUN groupadd -r playwright && useradd -r -g playwright playwright
+USER playwright
+
+# Default: run full suite
+CMD ["npx", "playwright", "test"]</div>
+  <div class="pro-tip" style="margin-top:10px">Use mcr.microsoft.com/playwright official image — browsers pre-installed. Never RUN npx playwright install in CI — it's slow and unreliable.</div>
+</div>
+
+<div class="card">
+  <h2>GitHub Actions — PR Gate (Smoke)</h2>
+  <div class="code-block">name: Playwright Smoke Tests
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.44.0-jammy
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install deps
+        run: npm ci
+      
+      - name: Run smoke tests
+        run: npx playwright test --grep @smoke
+        env:
+          TEST_ENV: staging
+          BASE_URL: ${{ secrets.STAGING_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+      
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30</div>
+</div>
+
+<div class="card">
+  <h2>GitHub Actions — Nightly Regression with Sharding</h2>
+  <div class="code-block">name: Nightly Regression
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM daily
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.44.0-jammy
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]  # 4 parallel shards
+    
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - name: Run shard
+        run: npx playwright test --shard=${{ matrix.shard }}/4
+        env:
+          TEST_ENV: staging
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report/
+  
+  merge-reports:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with: { pattern: blob-report-*, merge-multiple: true, path: all-blobs/ }
+      - run: npx playwright merge-reports --reporter html ./all-blobs
+      - uses: actions/upload-artifact@v4
+        with: { name: final-report, path: playwright-report/ }</div>
+</div>
+
+<div class="card">
+  <h2>Flaky Test Handling in CI</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="cicd"></div>
+    <div class="topic-label"><strong>retries: 2</strong> in playwright.config — only retries in CI (set retries: process.env.CI ? 2 : 0)</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="cicd"></div>
+    <div class="topic-label"><strong>Quarantine tag:</strong> mark known flaky as @flaky, exclude from PR gate: --grep-invert @flaky</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="cicd"></div>
+    <div class="topic-label"><strong>trace: 'on-first-retry'</strong> — traces only generated when a test fails once, keeps CI storage clean</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="cicd"></div>
+    <div class="topic-label"><strong>Flaky report:</strong> parse JSON output in CI, post any test with retries > 0 to Slack as a flakiness alert</div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 6: BEST PRACTICES -->
+<div class="section" id="tab-bestpractices">
+<div class="card">
+  <h2>Smart Locator Strategy — Priority Order</h2>
+  <div class="topic-row" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px;margin-bottom:6px">
+    <div class="topic-label"><span style="color:#1D9E75;font-weight:500">1st</span> — getByRole() · Semantic, accessibility-aligned, change-resistant</div>
+  </div>
+  <div class="topic-row" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px;margin-bottom:6px">
+    <div class="topic-label"><span style="color:#185FA5;font-weight:500">2nd</span> — getByLabel() · Form fields. Never fails on input type changes</div>
+  </div>
+  <div class="topic-row" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px;margin-bottom:6px">
+    <div class="topic-label"><span style="color:#854F0B;font-weight:500">3rd</span> — getByText() / getByPlaceholder() · For static text you control</div>
+  </div>
+  <div class="topic-row" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px;margin-bottom:6px">
+    <div class="topic-label"><span style="color:#7F77DD;font-weight:500">4th</span> — data-testid · When devs add them. Better than CSS. Never use auto-generated IDs.</div>
+  </div>
+  <div class="topic-row" style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:8px">
+    <div class="topic-label"><span style="color:#A32D2D;font-weight:500">Avoid</span> — CSS classes, XPath, nth-child, auto-generated class names</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Flaky Test Prevention</h2>
+  <div class="tip-row">
+    <div class="tip-label">Never use page.waitForTimeout()</div>
+    <div class="tip-body">Use explicit assertions instead. expect(locator).toBeVisible() already retries. If you need to wait, your locator is wrong or your assertion is wrong.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Isolate test state completely</div>
+    <div class="tip-body">Each test must create its own data and clean up. Never share mutable state between tests. Parallel tests that share data will collide randomly.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Avoid testing timing-dependent behavior</div>
+    <div class="tip-body">Use network interception to control API response speed. Never assert "animation complete" — assert the final state only.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Use strict mode locators</div>
+    <div class="tip-body">Enable strict:true in config. Forces you to use unique locators. Multiple matches = test error. This catches bad locators at authoring time, not in CI.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Scope locators to their component</div>
+    <div class="tip-body">const modal = page.getByRole('dialog'); modal.getByRole('button', {name:'Save'}) — not page.getByRole('button', {name:'Save'}). Pages have many Save buttons.</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Code Review Checklist</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">No raw CSS selectors or XPath in test files</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">No page.waitForTimeout() anywhere in the codebase</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">No assertions inside Page Objects</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">Every test is independent — can run alone or in any order</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">Sensitive data (passwords, tokens) from env vars only — never hardcoded</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">Test has a clear Arrange / Act / Assert structure</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">Test name describes what it proves, not what it does</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="bestpractices"></div>
+    <div class="topic-label">New test has a @smoke or @regression tag</div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 7: TIMELINE -->
+<div class="section" id="tab-timeline">
+<div class="stat-row">
+  <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Weeks</div></div>
+  <div class="stat"><div class="stat-num">10–15</div><div class="stat-lbl">Hours/Week</div></div>
+  <div class="stat"><div class="stat-num">~75</div><div class="stat-lbl">Total Hours</div></div>
+  <div class="stat"><div class="stat-num">3</div><div class="stat-lbl">Projects built</div></div>
+</div>
+<div class="card">
+  <h2>Week-by-Week Plan</h2>
+  <div class="week-row" style="font-weight:500;font-size:12px;color:var(--color-text-secondary)">
+    <div>Week</div><div>Focus</div><div style="text-align:right">Hours</div>
+  </div>
+  <div class="week-row">
+    <div class="week-label">Week 1</div>
+    <div class="week-focus">
+      <strong>Foundation</strong> — Install, core APIs, locators, auto-wait, assertions<br>
+      <span style="font-size:12px;color:var(--color-text-secondary)">Mon–Wed: concepts + mini-tasks. Thu–Sun: Start Beginner Project</span>
+    </div>
+    <div class="week-hrs">10–12 hrs</div>
+  </div>
+  <div class="week-row">
+    <div class="week-label">Week 2</div>
+    <div class="week-focus">
+      <strong>POM + Project 1 Complete</strong> — Page Objects, test lifecycle, finish SauceDemo suite<br>
+      <span style="font-size:12px;color:var(--color-text-secondary)">Mon–Wed: POM + fixtures intro. Thu–Sun: Complete + polish project 1</span>
+    </div>
+    <div class="week-hrs">12–14 hrs</div>
+  </div>
+  <div class="week-row">
+    <div class="week-label">Week 3</div>
+    <div class="week-focus">
+      <strong>Professional Layer</strong> — Fixtures, auth patterns, API testing, network mocking<br>
+      <span style="font-size:12px;color:var(--color-text-secondary)">Mon–Wed: Fixtures deep dive. Thu–Sun: API+UI chain mini-tasks</span>
+    </div>
+    <div class="week-hrs">12–14 hrs</div>
+  </div>
+  <div class="week-row">
+    <div class="week-label">Week 4</div>
+    <div class="week-focus">
+      <strong>Project 2 + CI/CD</strong> — OrangeHRM framework + GitHub Actions pipeline<br>
+      <span style="font-size:12px;color:var(--color-text-secondary)">Mon–Wed: Build framework. Thu–Fri: GitHub Actions. Weekend: Polish</span>
+    </div>
+    <div class="week-hrs">14–15 hrs</div>
+  </div>
+  <div class="week-row">
+    <div class="week-label">Week 5</div>
+    <div class="week-focus">
+      <strong>Expert Layer</strong> — Docker, sharding, visual testing, custom reporter, Allure<br>
+      <span style="font-size:12px;color:var(--color-text-secondary)">Mon–Wed: Docker + sharding. Thu–Sun: Allure + reporter + start Project 3</span>
+    </div>
+    <div class="week-hrs">14–15 hrs</div>
+  </div>
+  <div class="week-row">
+    <div class="week-label">Week 6</div>
+    <div class="week-focus">
+      <strong>Project 3 + Portfolio Polish</strong> — DRC-model framework, README, GitHub publish<br>
+      <span style="font-size:12px;color:var(--color-text-secondary)">Mon–Thu: Complete advanced project. Fri–Sun: Write README, record demo</span>
+    </div>
+    <div class="week-hrs">14–15 hrs</div>
+  </div>
+</div>
+<div class="card">
+  <h2>Daily Rhythm (Weekday: 1.5–2 hrs)</h2>
+  <div class="tip-row"><div class="tip-label">First 20 min</div><div class="tip-body">Review what you built yesterday. Run tests. Fix anything broken.</div></div>
+  <div class="tip-row"><div class="tip-label">Next 60–80 min</div><div class="tip-body">New concept or build session. Write code immediately after reading docs.</div></div>
+  <div class="tip-row"><div class="tip-label">Last 10 min</div><div class="tip-body">Write one note on what you learned and one thing that confused you.</div></div>
+</div>
+</div>
+
+<!-- SECTION 8: MINDSET -->
+<div class="section" id="tab-mindset">
+<div class="card">
+  <h2>How Top Engineers Learn</h2>
+  <div class="tip-row">
+    <div class="tip-label">Build first, polish later</div>
+    <div class="tip-body">Working ugly code is worth more than perfect notes. Get something running in under 30 minutes of starting any new topic. Refactor later. Learning happens in the doing.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Read the actual source code</div>
+    <div class="tip-body">Open node_modules/@playwright/test/src in VSCode. Read how auto-wait works. How fixtures chain. You'll understand it 10x better than any tutorial.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Teach it back</div>
+    <div class="tip-body">After each week, explain what you learned as if coaching Andy or Jordon. If you stumble, that's exactly what you need to review. Write a short internal wiki.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Escape tutorial hell</div>
+    <div class="tip-body">Limit YouTube to 1 hour per topic maximum. The moment you understand the concept, stop the video and build it yourself. Watching a second tutorial on the same topic = wasted time.</div>
+  </div>
+</div>
+<div class="card">
+  <h2>Think Like a Test Architect</h2>
+  <div class="tip-row">
+    <div class="tip-label">Ask "what breaks in parallel?" before writing any test</div>
+    <div class="tip-body">Architects think in scale from day one. Every test you write: can 10 workers run this simultaneously without conflict? If not, fix the data isolation first.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Treat your framework as a product</div>
+    <div class="tip-body">Write a README. Version it. Make it installable. Document the fixture API like it's a public SDK. This mindset produces frameworks other engineers actually use.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Instrument everything</div>
+    <div class="tip-body">Capture: test duration, retry count, environment, build ID per run. You need this data to argue for infrastructure investment and prove ROI to management.</div>
+  </div>
+  <div class="tip-row">
+    <div class="tip-label">Design for the junior who joins in 6 months</div>
+    <div class="tip-body">If they can't write their first test in 30 minutes using your framework, it's too complex. The best frameworks constrain the wrong choices automatically.</div>
+  </div>
+</div>
+<div class="card">
+  <h2>Time Management</h2>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="mindset"></div>
+    <div class="topic-label">Block 2 hours minimum per session — context switching kills learning depth</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="mindset"></div>
+    <div class="topic-label">One topic per week maximum — depth over breadth always wins</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="mindset"></div>
+    <div class="topic-label">Tie every new concept to a DRC INSIGHT real scenario — grounds abstract concepts</div>
+  </div>
+  <div class="topic-row">
+    <div class="check-col"><input type="checkbox" class="progress-check" data-section="mindset"></div>
+    <div class="topic-label">Ship something every week — even if small. Momentum matters more than perfection.</div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 9: RESOURCES -->
+<div class="section" id="tab-resources">
+<div class="card">
+  <h2>Official Docs — Read These Sections First</h2>
+  <div class="resource-row">
+    <div class="resource-icon">📖</div>
+    <div><div class="resource-title">playwright.dev/docs/locators</div><div class="resource-desc">The locator guide is the single most important page. Read it before writing your first test.</div></div>
+  </div>
+  <div class="resource-row">
+    <div class="resource-icon">📖</div>
+    <div><div class="resource-title">playwright.dev/docs/test-fixtures</div><div class="resource-desc">The fixture docs with the scope diagram. Read until you can explain it to someone else.</div></div>
+  </div>
+  <div class="resource-row">
+    <div class="resource-icon">📖</div>
+    <div><div class="resource-title">playwright.dev/docs/api/class-page</div><div class="resource-desc">Bookmark the Page API reference. Scan all methods — you'll discover 20 you didn't know existed.</div></div>
+  </div>
+  <div class="resource-row">
+    <div class="resource-icon">📖</div>
+    <div><div class="resource-title">playwright.dev/docs/trace-viewer</div><div class="resource-desc">Your debugging bible. Study the trace format before you have your first flaky test.</div></div>
+  </div>
+</div>
+<div class="card">
+  <h2>GitHub Repos to Study</h2>
+  <div class="resource-row">
+    <div class="resource-icon">⭐</div>
+    <div><div class="resource-title">microsoft/playwright — /tests/</div><div class="resource-desc">How Microsoft tests Playwright itself. Highest quality Playwright code on the internet. Study fixture patterns here.</div></div>
+  </div>
+  <div class="resource-row">
+    <div class="resource-icon">⭐</div>
+    <div><div class="resource-title">playwright-community/playwright-go</div><div class="resource-desc">Community patterns and advanced examples. Good for non-obvious use cases.</div></div>
+  </div>
+  <div class="resource-row">
+    <div class="resource-icon">⭐</div>
+    <div><div class="resource-title">github.com/nicholasgasior/playwright-pom-example</div><div class="resource-desc">Clean POM + TypeScript example. Good starting reference for structure.</div></div>
+  </div>
+</div>
+<div class="card">
+  <h2>High-Quality Blogs Only</h2>
+  <div class="resource-row">
+    <div class="resource-icon">✍</div>
+    <div><div class="resource-title">timdeschryver.dev/blog — Playwright category</div><div class="resource-desc">Tim Deschryver writes the deepest Playwright posts available. Every post is worth reading cover-to-cover.</div></div>
+  </div>
+  <div class="resource-row">
+    <div class="resource-icon">✍</div>
+    <div><div class="resource-title">reflect.run/blog</div><div class="resource-desc">Practical testing architecture articles. Good for framework design thinking.</div></div>
+  </div>
+  <div class="resource-row">
+    <div class="resource-icon">▶</div>
+    <div><div class="resource-title">Playwright YouTube channel (official)</div><div class="resource-desc">Conference talks from the Playwright team. The "What's new" videos are excellent for keeping up with releases.</div></div>
+  </div>
+</div>
+<div class="card">
+  <div class="avoid"><strong>What to ignore:</strong> "Playwright for beginners" bootcamp-style Udemy courses (outdated APIs), any blog post using page.waitForSelector() as main pattern (outdated), generic QA certification prep courses, any resource that uses XPath as primary locator strategy, Reddit threads on "best test framework" — analysis paralysis trap.</div>
+</div>
+</div>
+
+<!-- SECTION 10: MASTER CHECKLIST -->
+<div class="section" id="tab-checklist">
+<div class="card">
+  <h2>Foundation Checklist</h2>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Playwright installed, tsconfig.json configured with strict mode</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Wrote 10 tests using only semantic locators (zero CSS)</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Can explain auto-waiting without notes</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Beginner project (SauceDemo) complete with HTML report</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Page Object Model implemented with zero locators in test files</div></div>
+</div>
+<div class="card">
+  <h2>Professional Layer Checklist</h2>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Custom fixtures created (test-scoped and worker-scoped)</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Auth handled via storageState (not re-login on every test)</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">API seeding fixture working (data created without UI)</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Network interception used to test an error state</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Intermediate project (OrangeHRM) with Allure report complete</div></div>
+</div>
+<div class="card">
+  <h2>Expert Layer Checklist</h2>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Dockerfile written and tests run inside container locally</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">GitHub Actions PR gate (smoke) working end-to-end</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Nightly sharded regression pipeline set up with merged reports</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Visual snapshot regression tests in place</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Advanced project (DRC-model) complete with full README on GitHub</div></div>
+</div>
+<div class="card">
+  <h2>Job-Ready Checklist</h2>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Three public GitHub repos with professional READMEs</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Can explain your framework architecture in a 5-minute whiteboard session</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">LinkedIn updated: "Playwright automation framework" with GitHub link</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Applied DRC INSIGHT framework learnings to actual work deliverables</div></div>
+  <div class="topic-row"><div class="check-col"><input type="checkbox" class="progress-check" data-section="checklist"></div><div class="topic-label">Coached at least one teammate (Andy/Jordon/Kathy) on a Playwright concept</div></div>
+</div>
+</div>
+
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('.section');
+
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    const target = document.getElementById('tab-' + btn.dataset.tab);
+    if(target) target.classList.add('active');
+  });
+});
+
+function updateProgress() {
+  const all = document.querySelectorAll('.progress-check');
+  const checked = document.querySelectorAll('.progress-check:checked');
+  const pct = all.length ? Math.round((checked.length / all.length) * 100) : 0;
+  
+  const circle = document.getElementById('ring-circle');
+  const circumference = 125.66;
+  const offset = circumference - (pct / 100) * circumference;
+  circle.style.strokeDashoffset = offset;
+  
+  document.getElementById('overallPct').textContent = pct + '%';
+  
+  const titles = ['Let\'s start your journey', 'Good start — keep going', 'Building momentum', 'Halfway there', 'Almost expert level', 'Framework architect achieved'];
+  const subs = ['Check items as you complete them', 'Foundation layer progressing', 'Professional patterns mastered', 'You\'re past the hard part', 'CI/CD + Docker unlocked', 'Job-ready and project-ready'];
+  const idx = Math.min(Math.floor(pct / 20), 5);
+  document.getElementById('overallTitle').textContent = titles[idx];
+  document.getElementById('overallSub').textContent = subs[idx];
+}
+
+document.querySelectorAll('.progress-check').forEach(cb => {
+  cb.addEventListener('change', updateProgress);
+});
+
+updateProgress();
+</script>
